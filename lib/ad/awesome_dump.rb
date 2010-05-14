@@ -6,7 +6,7 @@
 require "shellwords"
 
 class AwesomeDump
-  AP = :__awesome_dump__
+  AD = :__awesome_dump__
   CORE = [ :array, :hash, :class, :file, :dir, :bigdecimal, :rational, :struct ]
 
   def initialize(options = {})
@@ -31,13 +31,13 @@ class AwesomeDump
         :trueclass  => :green
       }
     }
-
+    
     # Merge custom defaults and let explicit options parameter override them.
     merge_custom_defaults!
     merge_options!(options)
-
+    
     @indentation = @options[:indent].abs
-    Thread.current[AP] ||= []
+    Thread.current[AD] ||= []
   end
   
   private
@@ -141,14 +141,14 @@ class AwesomeDump
   # Dispatcher that detects data nesting and invokes object-aware formatter.
   #------------------------------------------------------------------------------
   def awesome(object)
-    if Thread.current[AP].include?(object.object_id)
+    if Thread.current[AD].include?(object.object_id)
       nested(object)
     else
       begin
-        Thread.current[AP] << object.object_id
+        Thread.current[AD] << object.object_id
         send(:"awesome_#{printable(object)}", object)
       ensure
-        Thread.current[AP].pop
+        Thread.current[AD].pop
       end
     end
   end
