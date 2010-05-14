@@ -1,9 +1,9 @@
 # Copyright (c) 2010 Michael Dvorkin
 #
-# Awesome Print is freely distributable under the terms of MIT license.
+# Awesome Dump is freely distributable under the terms of MIT license.
 # See LICENSE file or http://www.opensource.org/licenses/mit-license.php
 #------------------------------------------------------------------------------
-module AwesomePrintActiveSupport
+module AwesomeDumpActiveSupport
 
   def self.included(base)
     base.send :alias_method, :printable_without_active_support, :printable
@@ -41,4 +41,4 @@ module AwesomePrintActiveSupport
 
 end
 
-AwesomePrint.send(:include, AwesomePrintActiveSupport)
+AwesomeDump.send(:include, AwesomeDumpActiveSupport)

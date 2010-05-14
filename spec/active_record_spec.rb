@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 require 'active_record'
-require 'ap/mixin/active_record'
+require 'ad/mixin/active_record'
 
 
 if defined?(::ActiveRecord)
@@ -34,7 +34,7 @@ if defined?(::ActiveRecord)
     end
   end
   
-  describe "AwesomePrint/ActiveRecord" do
+  describe "AwesomeDump/ActiveRecord" do
     before(:each) do
       stub_dotfile!
     end
@@ -45,11 +45,11 @@ if defined?(::ActiveRecord)
         ActiveRecord::Base.default_timezone = :utc
         @diana = User.new(:name => "Diana", :rank => 1, :admin => false, :created_at => "1992-10-10 12:30:00")
         @laura = User.new(:name => "Laura", :rank => 2, :admin => true,  :created_at => "2003-05-26 14:15:00")
-        @ap = AwesomePrint.new(:plain => true)
+        @ad = AwesomeDump.new(:plain => true)
       end
 
       it "display single record" do
-        out = @ap.send(:awesome, @diana)
+        out = @ad.send(:awesome, @diana)
         out.gsub(/0x([a-f\d]+)/, "0x01234567").should == <<-EOS.strip
 #<User:0x01234567> {
             :id => nil,
@@ -62,7 +62,7 @@ EOS
       end
 
       it "display multiple records" do
-        out = @ap.send(:awesome, [ @diana, @laura ])
+        out = @ad.send(:awesome, [ @diana, @laura ])
         out.gsub(/0x([a-f\d]+)/, "0x01234567").should == <<-EOS.strip
 [
     [0] #<User:0x01234567> {
@@ -87,8 +87,8 @@ EOS
     #------------------------------------------------------------------------------
     describe "ActiveRecord class" do
       it "should print the class" do
-        @ap = AwesomePrint.new(:plain => true)
-        @ap.send(:awesome, User).should == <<-EOS.strip
+        @ad = AwesomeDump.new(:plain => true)
+        @ad.send(:awesome, User).should == <<-EOS.strip
 class User < ActiveRecord::Base {
             :id => :integer,
           :name => :string,
@@ -101,8 +101,8 @@ class User < ActiveRecord::Base {
 end
 
 it "should print the class for non-direct subclasses of AR::Base" do
-  @ap = AwesomePrint.new(:plain => true)
-  @ap.send(:awesome, SubUser).should == <<-EOS.strip
+  @ad = AwesomeDump.new(:plain => true)
+  @ad.send(:awesome, SubUser).should == <<-EOS.strip
 class SubUser < User {
             :id => :integer,
           :name => :string,

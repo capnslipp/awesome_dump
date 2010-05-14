@@ -1,12 +1,12 @@
 # Copyright (c) 2010 Michael Dvorkin
 #
-# Awesome Print is freely distributable under the terms of MIT license.
+# Awesome Dump is freely distributable under the terms of MIT license.
 # See LICENSE file or http://www.opensource.org/licenses/mit-license.php
 #------------------------------------------------------------------------------
 require "shellwords"
 
-class AwesomePrint
-  AP = :__awesome_print__
+class AwesomeDump
+  AP = :__awesome_dump__
   CORE = [ :array, :hash, :class, :file, :dir, :bigdecimal, :rational, :struct ]
 
   def initialize(options = {})
@@ -227,10 +227,10 @@ class AwesomePrint
     @options.merge!(options)
   end
 
-  # Load ~/.aprc file with custom defaults that override default options.
+  # Load ~/.adrc file with custom defaults that override default options.
   #------------------------------------------------------------------------------
   def merge_custom_defaults!
-    dotfile = File.join(ENV["HOME"], ".aprc")
+    dotfile = File.join(ENV["HOME"], ".adrc")
     if File.readable?(dotfile)
       load dotfile
       merge_options!(self.class.defaults)

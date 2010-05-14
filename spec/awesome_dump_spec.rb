@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 require "bigdecimal"
 require "rational"
 
-describe "AwesomePrint" do
+describe "AwesomeDump" do
   before(:each) do
     stub_dotfile!
   end
@@ -280,9 +280,9 @@ EOS
   #------------------------------------------------------------------------------
   describe "Utility methods" do
     it "should merge options" do
-      ap = AwesomePrint.new
-      ap.send(:merge_options!, { :color => { :array => :black }, :indent => 0 })
-      options = ap.instance_variable_get("@options")
+      ad = AwesomeDump.new
+      ad.send(:merge_options!, { :color => { :array => :black }, :indent => 0 })
+      options = ad.instance_variable_get("@options")
       options[:color][:array].should == :black
       options[:indent].should == 0
     end

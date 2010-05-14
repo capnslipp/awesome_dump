@@ -4,7 +4,7 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{awesome_print}
+  s.name = %q{awesome_dump}
   s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
@@ -23,30 +23,30 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "init.rb",
-     "lib/ap.rb",
-     "lib/ap/awesome_print.rb",
-     "lib/ap/core_ext/kernel.rb",
-     "lib/ap/core_ext/logger.rb",
-     "lib/ap/core_ext/string.rb",
-     "lib/ap/mixin/active_record.rb",
-     "lib/ap/mixin/active_support.rb",
+     "lib/ad.rb",
+     "lib/ad/awesome_dump.rb",
+     "lib/ad/core_ext/kernel.rb",
+     "lib/ad/core_ext/logger.rb",
+     "lib/ad/core_ext/string.rb",
+     "lib/ad/mixin/active_record.rb",
+     "lib/ad/mixin/active_support.rb",
      "rails/init.rb",
      "spec/active_record_spec.rb",
-     "spec/awesome_print_spec.rb",
+     "spec/awesome_dump_spec.rb",
      "spec/logger_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
      "spec/string_spec.rb"
   ]
-  s.homepage = %q{http://github.com/michaeldv/awesome_print}
+  s.homepage = %q{http://github.com/slippyd/awesome_dump}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubyforge_project = %q{awesome_print}
+  s.rubyforge_project = %q{awesome_dump}
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Pretty print Ruby objects with proper indentation and colors.}
   s.test_files = [
     "spec/active_record_spec.rb",
-     "spec/awesome_print_spec.rb",
+     "spec/awesome_dump_spec.rb",
      "spec/logger_spec.rb",
      "spec/spec_helper.rb",
      "spec/string_spec.rb"

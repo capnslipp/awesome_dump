@@ -1,20 +1,20 @@
 # Copyright (c) 2010 Michael Dvorkin
 #
-# Awesome Print is freely distributable under the terms of MIT license.
+# Awesome Dump is freely distributable under the terms of MIT license.
 # See LICENSE file or http://www.opensource.org/licenses/mit-license.php
 #------------------------------------------------------------------------------
 module Kernel
 
   def ai(options = {})
-    ap = AwesomePrint.new(options)
-    ap.send(:awesome, self)
+    ad = AwesomeDump.new(options)
+    ad.send(:awesome, self)
   end
   alias :awesome_inspect :ai
 
-  def ap(object, options = {})
+  def ad(object, options = {})
     puts object.ai(options)
   end
-  alias :awesome_print :ap
+  alias :awesome_dump :ad
 
-  module_function :ap
+  module_function :ad
 end

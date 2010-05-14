@@ -1,22 +1,21 @@
-## Awesome Print ##
-Awesome Print is Ruby library that pretty prints Ruby objects in full color
-exposing their internal structure with proper indentation. Rails ActiveRecord
-objects are supported via included mixin.
+## Awesome Dump ##
+Awesome Dump is Ruby library that dumps Ruby objects as nested hashes, exposing their internal structure in a form safe for conversion to JSON, YAML, or other data formats.
+Rails ActiveRecord objects are supported via included mixin.
 
 ### Installation ###
     # Installing as Ruby gem
-    $ gem install awesome_print
+    $ gem install awesome_dump
 
     # Installing as Rails plugin
-    $ ruby script/plugin install http://github.com/michaeldv/awesome_print_.git
+    $ ruby script/plugin install http://github.com/slippyd/awesome_dump_.git
 
     # Cloning the repository
-    $ git clone git://github.com/michaeldv/awesome_print_.git
+    $ git clone git://github.com/slippyd/awesome_dump_.git
 
 ### Usage ###
 
-    require "ap"
-    ap object, options = {}
+    require "ad"
+    ad object, options = {}
 
 Default options:
 
@@ -46,9 +45,9 @@ Supported color names:
 
 ### Examples ###
     $ cat > 1.rb
-    require "ap"
+    require "ad"
     data = [ false, 42, %w(forty two), { :now => Time.now, :class => Time.now.class, :distance => 42e42 } ]
-    ap data
+    ad data
     ^D
     $ ruby 1.rb
     [
@@ -66,9 +65,9 @@ Supported color names:
     ]
 
     $ cat > 2.rb
-    require "ap"
+    require "ad"
     data = { :now => Time.now, :class => Time.now.class, :distance => 42e42 }
-    ap data, :indent => -2  # <-- Left align hash keys.
+    ad data, :indent => -2  # <-- Left align hash keys.
     ^D
     $ ruby 2.rb
     {
@@ -78,10 +77,10 @@ Supported color names:
     }
 
     $ cat > 3.rb
-    require "ap"
+    require "ad"
     data = [ false, 42, %w(forty two) ]
     data << data  # <-- Nested array.
-    ap data, :multiline => false
+    ad data, :multiline => false
     ^D
     $ ruby 3.rb
     [ false, 42, [ "forty", "two" ], [...] ]
@@ -89,8 +88,8 @@ Supported color names:
 ### Example (Rails console) ###
     $ ruby script/console
     Loading development environment (Rails 2.3.5)
-    rails> require "ap"
-    rails> ap Account.all(:limit => 2)
+    rails> require "ad"
+    rails> ad Account.all(:limit => 2)
     [
         [0] #<Account:0x1033220b8> {
                          :id => 1,
@@ -125,7 +124,7 @@ Supported color names:
             :background_info => nil
         }
     ]
-    rails> ap Account
+    rails> ad Account
     class Account < ActiveRecord::Base {
                      :id => :integer,
                 :user_id => :integer,
@@ -145,22 +144,22 @@ Supported color names:
     rails>
 
 ### IRB integration ###
-To use awesome_print as default formatter in irb and Rails console add the following
+To use awesome_dump as default formatter in irb and Rails console add the following
 lines into your ~/.irbrc file:
 
 	require "rubygems"
-	require "ap"
+	require "ad"
 	IRB::Irb.class_eval do
 	  def output_value
-	    ap @context.last_value
+	    ad @context.last_value
 	  end
 	end
 
 ### Logger Convenience Method ###
-awesome_print adds an ap method to the Logger and ActiveSupport::BufferedLogger classes,
+awesome_dump adds an ad method to the Logger and ActiveSupport::BufferedLogger classes,
 allowing you to call:
 
-    logger.ap object
+    logger.ad object
 
 By default, this logs at the :debug level. You can override that globally with
 
@@ -168,15 +167,15 @@ By default, this logs at the :debug level. You can override that globally with
 
 in the custom defaults (see below), or you can override on a per call basis with
 
-    logger.ap object, :warn
+    logger.ad object, :warn
 
 ### Setting Custom Defaults ###
-You can set your own default options by creating ``.aprc`` file in your home
-directory. Within that file assign your  defaults to ``AwesomePrint.defaults``.
+You can set your own default options by creating ``.adrc`` file in your home
+directory. Within that file assign your  defaults to ``AwesomeDump.defaults``.
 For example:
 
-    # ~/.aprc file.
-    AwesomePrint.defaults = {
+    # ~/.adrc file.
+    AwesomeDump.defaults = {
       :indent => -2,
       :color => {
         :hash  => :pale,
@@ -193,12 +192,16 @@ For example:
 
 ### Contributors ###
 
+awesome_print:
+* Michael Dvorkin -- http://github.com/michaeldv
 * Daniel Bretoi -- http://github.com/danielb2
 * eregon -- http://github.com/eregon
 * Tobias Crawley -- http://github.com/tobias
 
 ### License ###
-Copyright (c) 2010 Michael Dvorkin  
-%w(mike dvorkin.net) * "@" || %w(mike fatfreecrm.com) * "@"
+Copyright (c) 2010 Slippy Douglas
+
+Based on awesome_print, Copyright (c) 2010 Michael Dvorkin
+	%w(mike dvorkin.net) * "@" || %w(mike fatfreecrm.com) * "@"
 
 Released under the MIT license. See LICENSE file for details.

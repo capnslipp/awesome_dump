@@ -4,12 +4,12 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "awesome_print"
-    gem.rubyforge_project = "awesome_print"
+    gem.name = "awesome_dump"
+    gem.rubyforge_project = "awesome_dump"
     gem.summary = %Q{Pretty print Ruby objects with proper indentation and colors.}
     gem.description = %Q{Great Ruby dubugging companion: pretty print Ruby objects to visualize their structure. Supports Rails ActiveRecord objects via included mixin.}
     gem.email = "mike@dvorkin.net"
-    gem.homepage = "http://github.com/michaeldv/awesome_print"
+    gem.homepage = "http://github.com/slippyd/awesome_dump"
     gem.authors = ["Michael Dvorkin"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.files = FileList["[A-Z]*", "lib/**/*.rb", "rails/*.rb", "spec/*", "init.rb"]
@@ -42,7 +42,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
  rdoc.rdoc_dir = 'rdoc'
- rdoc.title = "ap #{version}"
+ rdoc.title = "ad #{version}"
  rdoc.rdoc_files.include('README*')
  rdoc.rdoc_files.include('lib/**/*.rb')
 end
