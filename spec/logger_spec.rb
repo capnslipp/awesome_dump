@@ -12,7 +12,7 @@ describe "AwesomeDump logging extensions" do
   describe "ad method" do
     it "should awesome_inspect the given object" do
       object = mock
-      object.should_receive(:ai)
+      object.should_receive(:ad)
       @logger.ad object
     end
     

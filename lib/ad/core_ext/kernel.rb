@@ -5,16 +5,9 @@
 #------------------------------------------------------------------------------
 module Kernel
 
-  def ai(options = {})
+  def ad(options = {})
     ad = AwesomeDump.new(options)
     ad.send(:awesome, self)
   end
-  alias :awesome_inspect :ai
-
-  def ad(object, options = {})
-    puts object.ai(options)
-  end
   alias :awesome_dump :ad
-
-  module_function :ad
 end

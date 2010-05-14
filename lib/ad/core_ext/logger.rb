@@ -9,7 +9,7 @@ module AwesomeDumpLogger
   #------------------------------------------------------------------------------
   def ad(object, level = nil)
     level ||= AwesomeDump.defaults[:log_level] || :debug
-    send level, object.ai
+    send level, object.ad
   end
 
 end
