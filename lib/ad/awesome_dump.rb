@@ -153,7 +153,7 @@ class AwesomeDump
     end
     
     ## Catch-all method to format an arbitrary object.
-    def method_missing?(method_id, object)
+    def method_missing(method_id, object)
       return self[object]
     end
     
