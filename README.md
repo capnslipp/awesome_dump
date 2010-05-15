@@ -1,187 +1,84 @@
 ## Awesome Dump ##
 Awesome Dump is Ruby library that dumps Ruby objects as nested hashes/arrays, exposing their internal structure in a form safe for conversion to JSON, YAML, or other data formats.
-Rails ActiveRecord objects are supported via included mixin.
+
+Notes:
+
+*	Makes sure recursive object graphs are ellipse'd and all relevant data is outputted cleanly (i.e. advantages over just using a plain to_json).
+*	Awesome Dump'ed data looks awesome when converted to_json, then viewed with a JSON viewer (e.g. JSONView (https://addons.mozilla.org/en-US/firefox/addon/10869/), FirePHP/FireConsole (http://www.firephp.org/), or json2html (http://json.bloople.net/)).
+*	This library is very much not-done. It's inconsistent at times and subject to lots of improvement.
 
 ### Installation ###
-    # Installing as Ruby gem
-    $ gem install awesome_dump
+	# Installing as Rails plugin
+	$ ruby script/plugin install git://github.com/slippyd/awesome_dump.git
 
-    # Installing as Rails plugin
-    $ ruby script/plugin install http://github.com/slippyd/awesome_dump_.git
+	# Installing as a Ruby library
+	$ git clone git://github.com/slippyd/awesome_dump.git lib/awesome_dump
 
-    # Cloning the repository
-    $ git clone git://github.com/slippyd/awesome_dump_.git
+	# Installing as a Ruby library, with Git submodules
+	$ git submodule add git://github.com/slippyd/awesome_dump.git lib/awesome_dump
+	$ git submodule init
+	$ git submodule update
+
+	# Cloning the repository
+	$ git clone git://github.com/slippyd/awesome_dump.git
 
 ### Usage ###
 
-    require "ad"
-    ad object, options = {}
+	require 'ad'
+	some_object.ad
 
-Default options:
+	require 'ad', 'json'
+	some_object.ad(:escape => :safe).to_json
 
-    :multiline => true,
-    :plain  => false,
-    :indent => 4,
-    :color => {
-      :array      => :white,
-      :bignum     => :blue,
-      :class      => :yellow,
-      :date       => :greenish,
-      :falseclass => :red,
-      :fixnum     => :blue,
-      :float      => :blue,
-      :hash       => :gray,
-      :nilclass   => :red,
-      :string     => :yellowish,
-      :symbol     => :cyanish,
-      :time       => :greenish,
-      :trueclass  => :green
-    }
+	require 'ad', 'yaml'
+	some_object.ad(:escape => :quote).to_yaml
 
-Supported color names:
+Supported options:
 
-    :gray, :red, :green, :yellow, :blue, :purple, :cyan, :white
-    :black, :redish, :greenish, :yellowish, :blueish, :purpleish, :cyanish, :pale
+*	":escape => :safe": Quotes constructs that probably won't translate well into languages other than Ruby (e.g. symbols, classes). Can result in ambigious or lossy results if naming conflicts occur.
+*	":escape => :quote": Quotes every piece of data that's dumped (i.e. numbers become strings and Strings become strings that start and end with a quote). Theoretically, this conversion should be reversible back into the original data.
 
 ### Examples ###
-    $ cat > 1.rb
-    require "ad"
-    data = [ false, 42, %w(forty two), { :now => Time.now, :class => Time.now.class, :distance => 42e42 } ]
-    ad data
-    ^D
-    $ ruby 1.rb
-    [
-        [0] false,
-        [1] 42,
-        [2] [
-            [0] "forty",
-            [1] "two"
-        ],
-        [3] {
-               :class => Time < Object,
-                 :now => Fri Apr 02 19:55:53 -0700 2010,
-            :distance => 4.2e+43
-        }
-    ]
 
-    $ cat > 2.rb
-    require "ad"
-    data = { :now => Time.now, :class => Time.now.class, :distance => 42e42 }
-    ad data, :indent => -2  # <-- Left align hash keys.
-    ^D
-    $ ruby 2.rb
-    {
-      :class    => Time < Object,
-      :now      => Fri Apr 02 19:55:53 -0700 2010,
-      :distance => 4.2e+43
-    }
-
-    $ cat > 3.rb
-    require "ad"
-    data = [ false, 42, %w(forty two) ]
-    data << data  # <-- Nested array.
-    ad data, :multiline => false
-    ^D
-    $ ruby 3.rb
-    [ false, 42, [ "forty", "two" ], [...] ]
-
-### Example (Rails console) ###
-    $ ruby script/console
-    Loading development environment (Rails 2.3.5)
-    rails> require "ad"
-    rails> ad Account.all(:limit => 2)
-    [
-        [0] #<Account:0x1033220b8> {
-                         :id => 1,
-                    :user_id => 5,
-                :assigned_to => 7,
-                       :name => "Hayes-DuBuque",
-                     :access => "Public",
-                    :website => "http://www.hayesdubuque.com",
-            :toll_free_phone => "1-800-932-6571",
-                      :phone => "(111)549-5002",
-                        :fax => "(349)415-2266",
-                 :deleted_at => nil,
-                 :created_at => Sat, 06 Mar 2010 09:46:10 UTC +00:00,
-                 :updated_at => Sat, 06 Mar 2010 16:33:10 UTC +00:00,
-                      :email => "info@hayesdubuque.com",
-            :background_info => nil
-        },
-        [1] #<Account:0x103321ff0> {
-                         :id => 2,
-                    :user_id => 4,
-                :assigned_to => 4,
-                       :name => "Ziemann-Streich",
-                     :access => "Public",
-                    :website => "http://www.ziemannstreich.com",
-            :toll_free_phone => "1-800-871-0619",
-                      :phone => "(042)056-1534",
-                        :fax => "(106)017-8792",
-                 :deleted_at => nil,
-                 :created_at => Tue, 09 Feb 2010 13:32:10 UTC +00:00,
-                 :updated_at => Tue, 09 Feb 2010 20:05:01 UTC +00:00,
-                      :email => "info@ziemannstreich.com",
-            :background_info => nil
-        }
-    ]
-    rails> ad Account
-    class Account < ActiveRecord::Base {
-                     :id => :integer,
-                :user_id => :integer,
-            :assigned_to => :integer,
-                   :name => :string,
-                 :access => :string,
-                :website => :string,
-        :toll_free_phone => :string,
-                  :phone => :string,
-                    :fax => :string,
-             :deleted_at => :datetime,
-             :created_at => :datetime,
-             :updated_at => :datetime,
-                  :email => :string,
-        :background_info => :string
-    }
-    rails>
-
-### IRB integration ###
-To use awesome_dump as default formatter in irb and Rails console add the following
-lines into your ~/.irbrc file:
-
-	require "rubygems"
-	require "ad"
-	IRB::Irb.class_eval do
-	  def output_value
-	    ad @context.last_value
+Ruby:
+	
+	require 'rubygems'
+	require 'json'
+	require 'awesome_dump/init'
+	
+	class Cow
+	  def initialize
+	    @moo = true
 	  end
 	end
+	
+	data = [false, 42, %w(forty two), {:how => 'now', 'brown' => Cow.new}]
+	puts "inspect:\n\t" + data.inspect
+	puts "ad.inspect:\n\t" + data.ad.inspect
+	puts "to_json:\n\t" + data.to_json
+	puts "ad(:escape => :safe).to_json:\n\t" + data.ad(:escape => :safe).to_json
 
-### Logger Convenience Method ###
-awesome_dump adds an ad method to the Logger and ActiveSupport::BufferedLogger classes,
-allowing you to call:
+Output:
+	
+	inspect:
+		[false, 42, ["forty", "two"], {:how=>"now", "brown"=>#<Cow:0x101069210 @moo=true>}]
+	ad.inspect:
+		[false, 42, ["forty", "two"], {:how=>"now", "brown"=>{:@moo=>true, :class=>Cow, :object_id=>2156087560}}]
+	to_json:
+		[false,42,["forty","two"],{"how":"now","brown":"#<Cow:0x101069210>"}]
+	ad(:escape => :safe).to_json:
+		[false,42,["forty","two"],{":how":"now","brown":{"class":"Cow","@moo":true,"object_id":2156087560}}]
 
-    logger.ad object
-
-By default, this logs at the :debug level. You can override that globally with
-
-    :log_level => :info
-
-in the custom defaults (see below), or you can override on a per call basis with
-
-    logger.ad object, :warn
 
 ### Setting Custom Defaults ###
 You can set your own default options by creating ``.adrc`` file in your home
-directory. Within that file assign your  defaults to ``AwesomeDump.defaults``.
+directory. Within that file assign your	 defaults to ``AwesomeDump.defaults``.
 For example:
 
-    # ~/.adrc file.
-    AwesomeDump.defaults = {
-      :indent => -2,
-      :color => {
-        :hash  => :pale,
-        :class => :white
-      }
-    }
+	# ~/.adrc file.
+	AwesomeDump.defaults = {
+	  :escape => :quote
+	}
 
 ### Note on Patches/Pull Requests ###
 * Fork the project on Github.
