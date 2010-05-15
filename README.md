@@ -1,5 +1,5 @@
 ## Awesome Dump ##
-Awesome Dump is Ruby library that dumps Ruby objects as nested hashes, exposing their internal structure in a form safe for conversion to JSON, YAML, or other data formats.
+Awesome Dump is Ruby library that dumps Ruby objects as nested hashes/arrays, exposing their internal structure in a form safe for conversion to JSON, YAML, or other data formats.
 Rails ActiveRecord objects are supported via included mixin.
 
 ### Installation ###
@@ -193,6 +193,7 @@ For example:
 ### Contributors ###
 
 awesome_print:
+
 * Michael Dvorkin -- http://github.com/michaeldv
 * Daniel Bretoi -- http://github.com/danielb2
 * eregon -- http://github.com/eregon
@@ -200,6 +201,7 @@ awesome_print:
 
 ### License ###
 Copyright (c) 2010 Slippy Douglas
+	'awesome_dump' + 64.chr + 'slippyd.com'
 
 Based on awesome_print, Copyright (c) 2010 Michael Dvorkin
 	%w(mike dvorkin.net) * "@" || %w(mike fatfreecrm.com) * "@"

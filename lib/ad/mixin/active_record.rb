@@ -1,4 +1,4 @@
-# Copyright (c) 2010 Michael Dvorkin
+# Copyright (c) 2010 Slippy Douglas & Michael Dvorkin
 #
 # Awesome Dump is freely distributable under the terms of MIT license.
 # See LICENSE file or http://www.opensource.org/licenses/mit-license.php
@@ -11,7 +11,6 @@ module AwesomeDumpActiveRecord
   end
 
   # Add ActiveRecord class names to the dispatcher pipeline.
-  #------------------------------------------------------------------------------
   def printable_with_active_record(object)
     printable = printable_without_active_record(object)
     if printable == :self
@@ -25,7 +24,6 @@ module AwesomeDumpActiveRecord
   end
 
   # Format ActiveRecord instance object.
-  #------------------------------------------------------------------------------
   def awesome_active_record_instance(object)
     data = object.class.column_names.inject(ActiveSupport::OrderedHash.new) do |hash, name|
       hash[name.to_sym] = object.send(name) if object.has_attribute?(name) || object.new_record?
@@ -35,7 +33,6 @@ module AwesomeDumpActiveRecord
   end
 
   # Format ActiveRecord class object.
-  #------------------------------------------------------------------------------
   def awesome_active_record_class(object)
     if object.respond_to?(:columns)
       data = object.columns.inject(ActiveSupport::OrderedHash.new) do |hash, c|

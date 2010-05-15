@@ -1,4 +1,4 @@
-# Copyright (c) 2010 Michael Dvorkin
+# Copyright (c) 2010 Slippy Douglas & Michael Dvorkin
 #
 # Awesome Dump is freely distributable under the terms of MIT license.
 # See LICENSE file or http://www.opensource.org/licenses/mit-license.php
@@ -11,7 +11,6 @@ module AwesomeDumpActiveSupport
   end
 
   # Add ActiveSupport class names to the dispatcher pipeline.
-  #------------------------------------------------------------------------------
   def printable_with_active_support(object)
     printable = printable_without_active_support(object)
     if printable == :self
@@ -25,7 +24,6 @@ module AwesomeDumpActiveSupport
   end
 
   # Format ActiveSupport::TimeWithZone as standard Time.
-  #------------------------------------------------------------------------------
   def awesome_active_support_time(object)
     awesome_self(object, :as => :time)
   end
@@ -34,7 +32,6 @@ module AwesomeDumpActiveSupport
   #
   # NOTE: can't use awesome_self(object, :as => :hash) since awesome_self uses
   # object.inspect internally, i.e. it would convert hash to string.
-  #------------------------------------------------------------------------------
   def awesome_hash_with_indifferent_access(object)
     awesome_hash(object)
   end

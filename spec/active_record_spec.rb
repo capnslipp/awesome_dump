@@ -7,7 +7,6 @@ require 'ad/mixin/active_record'
 if defined?(::ActiveRecord)
 
   # Create tableless ActiveRecord model.
-  #------------------------------------------------------------------------------
   class User < ActiveRecord::Base
     def self.columns()
       @columns ||= []

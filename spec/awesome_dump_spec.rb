@@ -29,7 +29,6 @@ describe "AwesomeDump" do
     end
   end
   
-  #------------------------------------------------------------------------------
   describe "Nested Array" do
     before(:each) do
       @arr = [ 1, 2 ]
@@ -52,7 +51,6 @@ describe "AwesomeDump" do
     end
   end
   
-  #------------------------------------------------------------------------------
   describe "Hash" do
     before(:each) do
       @hash = { 1 => { :sym => { "str" => { [1, 2, 3] => { {:k => :v} => Hash } } } } }
@@ -79,7 +77,6 @@ describe "AwesomeDump" do
     
   end
   
-  #------------------------------------------------------------------------------
   describe "Nested Hash" do
     before(:each) do
       @hash = {}
@@ -102,15 +99,13 @@ describe "AwesomeDump" do
     end
   end
   
-  #------------------------------------------------------------------------------
   describe "Class" do
-    it "shoud show superclass (default)" do
-      Fixnum.ad.should == 'Fixnum < Integer'
-      Class.ad.should == 'Class < Module'
+    it "shoud show superclass (quote-escape)" do
+      Fixnum.ad(:escape => :quote).should == 'Fixnum < Integer'
+      Class.ad(:escape => :quote).should == 'Class < Module'
     end
   end
   
-  #------------------------------------------------------------------------------
   describe "File" do
     it "should display a file (default)" do
       File.open(__FILE__, 'r') do |f|
@@ -119,7 +114,6 @@ describe "AwesomeDump" do
     end
   end
   
-  #------------------------------------------------------------------------------
   describe "Dir" do
     it "should display a directory (default)" do
       Dir.open(File.dirname(__FILE__)) do |d|
@@ -128,26 +122,18 @@ describe "AwesomeDump" do
     end
   end
   
-  #------------------------------------------------------------------------------
   describe "BigDecimal and Rational" do
     it "should present BigDecimal object as Float scalar" do
       big = BigDecimal("2010.4")
-      
-      # @TODO: which?
-      big.ad.should == 'BigDecimal("2010.4")'
       big.ad.should == "2010.4"
     end
     
     it "should present Rational object as Float scalar" do
       rat = Rational(2010, 2)
-      
-      # @TODO: which?
-      rat.ad.should == "Rational(2010, 2)"
       rat.ad.should == "1005.0"
     end
   end
   
-  #------------------------------------------------------------------------------
   describe "Utility methods" do
     it "should merge options" do
       ad = AwesomeDump.new
@@ -159,7 +145,6 @@ describe "AwesomeDump" do
   end
   
   
-  #------------------------------------------------------------------------------
   describe "Struct" do
     before(:each) do
       @struct = unless defined?(Struct::SimpleStruct)
@@ -186,7 +171,7 @@ describe "AwesomeDump" do
     end
     
     it "quote-escaped" do
-      d = {':address' => '1313 Mockingbird Lane', ':name' => 'Herman Munster'}
+      d = {':address' => '"1313 Mockingbird Lane"', ':name' => '"Herman Munster"'}
       @struct.ad(:escape => :quote).should == d
     end
   end
