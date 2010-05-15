@@ -5,24 +5,6 @@
 #------------------------------------------------------------------------------
 module AwesomeDumpActiveRecord
 
-  def self.included(base)
-    base.send :alias_method, :printable_without_active_record, :printable
-    base.send :alias_method, :printable, :printable_with_active_record
-  end
-
-  # Add ActiveRecord class names to the dispatcher pipeline.
-  def printable_with_active_record(object)
-    printable = printable_without_active_record(object)
-    if printable == :self
-      if object.is_a?(ActiveRecord::Base)
-        printable = :active_record_instance
-      end
-    elsif printable == :class and object.ancestors.include?(ActiveRecord::Base)
-      printable = :active_record_class
-    end
-    printable
-  end
-
   # Format ActiveRecord instance object.
   def awesome_active_record_instance(object)
     data = object.class.column_names.inject(ActiveSupport::OrderedHash.new) do |hash, name|

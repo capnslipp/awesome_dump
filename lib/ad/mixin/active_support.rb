@@ -5,24 +5,6 @@
 #------------------------------------------------------------------------------
 module AwesomeDumpActiveSupport
 
-  def self.included(base)
-    base.send :alias_method, :printable_without_active_support, :printable
-    base.send :alias_method, :printable, :printable_with_active_support
-  end
-
-  # Add ActiveSupport class names to the dispatcher pipeline.
-  def printable_with_active_support(object)
-    printable = printable_without_active_support(object)
-    if printable == :self
-      if object.is_a?(ActiveSupport::TimeWithZone)
-        printable = :active_support_time
-      elsif object.is_a?(HashWithIndifferentAccess)
-        printable = :hash_with_indifferent_access
-      end
-    end
-    printable
-  end
-
   # Format ActiveSupport::TimeWithZone as standard Time.
   def awesome_active_support_time(object)
     awesome_self(object, :as => :time)
