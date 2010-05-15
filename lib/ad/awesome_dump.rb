@@ -52,7 +52,7 @@ class AwesomeDump
     else
       begin
         Thread.current[AD] << object.object_id
-        @formatter.send(declassify(object).to_sym, object)
+        eval %<@formatter.#{declassify(object)}(object)>
       ensure
         Thread.current[AD].pop
       end
