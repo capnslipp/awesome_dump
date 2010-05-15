@@ -52,7 +52,7 @@ class AwesomeDump
     else
       begin
         Thread.current[AD] << object.object_id
-        eval %<@formatter.#{declassify(object)}(object)>
+        return eval(%<@formatter.#{declassify(object)}(object)>)
       ensure
         Thread.current[AD].pop
       end
@@ -114,8 +114,11 @@ class AwesomeDump
     ## Format a Struct. If @options[:indent] if negative left align hash keys.
     def struct(s)
       h = {}
-      s.each_pair {|k,v| h[k] = v }
-      return hash(h)
+      s.each_pair do |m, v|
+        m_k = [:quote, :safe].include?(@options[:escape]) ? m.to_s : m.to_sym
+        h[m_k] = @awesome.call(v)
+      end
+      return object(s, h)
     end
     
     ## Format Class object.
@@ -131,30 +134,39 @@ class AwesomeDump
     ## Format File object.
     def file(f)
       ls = File.directory?(f) ? `ls -adlF #{f.path.shellescape}` : `ls -alF #{f.path.shellescape}`
-      return self[f] #, :with => ls.empty? ? nil : "\n#{ls.chop}")
+      return object(f) #, :with => ls.empty? ? nil : "\n#{ls.chop}")
     end
     
     ## Format Dir object.
     def dir(d)
       ls = `ls -alF #{d.path.shellescape}`
-      return self[d] #, :with => ls.empty? ? nil : "\n#{ls.chop}")
+      return object(d) #, :with => ls.empty? ? nil : "\n#{ls.chop}")
     end
     
     ## Format BigDecimal and Rational objects by convering them to Float.
     def bigdecimal(n)
-      return self[n.to_f] #, :as => :bigdecimal
+      return object(n.to_f) #, :as => :bigdecimal
     end
     alias :rational :bigdecimal
     
     ## Format an arbitrary object.
-    ## Method name is an operator overload to avoid potential naming conflicts with class names that have been converted to method names.
-    def [](object)
-      return object.inspect #<< appear[:with].to_s #, appear[:as] || declassify(object)
+    def object(o, with=nil)
+      o_hash = case @options[:escape]
+        when :quote then {'class' => o.class.to_s, 'object_id' => o.object_id.to_s}
+        when :safe  then {'class' => o.class.to_s, 'object_id' => o.object_id}
+        else             {:class => o.class, :object_id => o.object_id}
+      end
+      o.instance_variables.sort.each do |iv|
+        iv_k = [:quote, :safe].include?(@options[:escape]) ? iv.to_s : iv.to_sym
+        o_hash[iv_k] = @awesome.call(o.instance_variable_get(iv))
+      end
+      o_hash = with.merge(o_hash) if with
+      return o_hash
     end
     
     ## Catch-all method to format an arbitrary object.
     def method_missing(method_id, object)
-      return self[object]
+      return object(object)
     end
     
   end

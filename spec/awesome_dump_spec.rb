@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require "bigdecimal"
-require "rational"
+require 'bigdecimal'
+require 'rational'
 
 describe "AwesomeDump" do
   before(:each) do
@@ -157,22 +157,76 @@ describe "AwesomeDump" do
     end
     
     it "empty struct" do
-      Struct.new('EmptyStruct').ad.should ==  "Struct::EmptyStruct < Struct"
+      empty_struct = Struct.new('EmptyStruct').new
+      empty_struct.ad.should ==  {:class => Struct::EmptyStruct, :object_id => empty_struct.object_id}
     end
     
     it "default" do
-      d = {:address => '1313 Mockingbird Lane', :name => 'Herman Munster'}
+      d = {:class => Struct::SimpleStruct, :object_id => @struct.object_id, :address => '1313 Mockingbird Lane', :name => 'Herman Munster'}
       @struct.ad.should == d
     end
     
     it "safe-escaped" do
-      d = {':address' => '1313 Mockingbird Lane', ':name' => 'Herman Munster'}
+      d = {'class' => 'Struct::SimpleStruct', 'object_id' => @struct.object_id, 'address' => '1313 Mockingbird Lane', 'name' => 'Herman Munster'}
       @struct.ad(:escape => :safe).should == d
     end
     
     it "quote-escaped" do
-      d = {':address' => '"1313 Mockingbird Lane"', ':name' => '"Herman Munster"'}
+      d = {'class' => 'Struct::SimpleStruct', 'object_id' => @struct.object_id.to_s, 'address' => '"1313 Mockingbird Lane"', 'name' => '"Herman Munster"'}
       @struct.ad(:escape => :quote).should == d
+    end
+  end
+  
+  describe "Some Random Object" do
+    before(:each) do
+      class SomeRandomObject
+        def initialize
+          @str = 'blah'
+          @int = 5
+          @arr = ['a', 3]
+          @hash = {:hi => 5, 'lo' => Object.new}
+        end
+      end
+      @object = SomeRandomObject.new
+    end
+    
+    it "default" do
+      d = { :class => SomeRandomObject, :object_id => @object.object_id,
+        :'@str' => 'blah',
+        :'@int' => 5,
+        :'@arr' => ['a', 3],
+        :'@hash' => {
+          :hi => 5,
+          'lo' => {:class => Object, :object_id => @object.instance_variable_get(:'@hash')['lo'].object_id}
+        }
+      }
+      @object.ad.should == d
+    end
+    
+    it "safe-escaped" do
+      d = { 'class' => 'SomeRandomObject', 'object_id' => @object.object_id,
+        '@str' => 'blah',
+        '@int' => 5,
+        '@arr' => ['a', 3],
+        '@hash' => {
+          ':hi' => 5,
+          'lo' => {'class' => 'Object', 'object_id' => @object.instance_variable_get(:'@hash')['lo'].object_id}
+        }
+      }
+      @object.ad(:escape => :safe).should == d
+    end
+    
+    it "quote-escaped" do
+      d = { 'class' => 'SomeRandomObject', 'object_id' => @object.object_id.to_s,
+        '@str' => '"blah"',
+        '@int' => '5',
+        '@arr' => ['"a"', '3'],
+        '@hash' => {
+          ':hi' => '5',
+          '"lo"' => {'class' => 'Object', 'object_id' => @object.instance_variable_get(:'@hash')['lo'].object_id.to_s}
+        }
+      }
+      @object.ad(:escape => :quote).should == d
     end
   end
   
